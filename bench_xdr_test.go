@@ -5,7 +5,7 @@
 package xdr_test
 
 import (
-	"github.com/calmh/xdr"
+	"github.com/imdario/xdr"
 )
 
 /*

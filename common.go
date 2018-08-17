@@ -1,4 +1,5 @@
-// Copyright (C) 2014 Jakob Borg. All rights reserved. Use of this source code
+// Copyright (C) 2014 Jakob Borg. All rights reserved.
+// Copyright (C) 2018 Dario Castañé. All rights reserved. Use of this source code
 // is governed by an MIT-style license that can be found in the LICENSE file.
 
 package xdr
