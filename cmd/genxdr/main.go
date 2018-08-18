@@ -265,7 +265,7 @@ func (o {{.Name}}) MarshalXDRInto(m *xdr.Marshaller) error {
 	return nil
 }//+n
 
-// Unmarshal parses the XDR-encoded data and stores the result in the
+// UnmarshalXDR parses the XDR-encoded data and stores the result in the
 // struct.
 func (o *{{.Name}}) UnmarshalXDR(bs []byte) error {
 	return nil
