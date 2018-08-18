@@ -93,16 +93,20 @@ import (
 `
 
 var encoderData = `
+// XDRSize returns the XDR encoded form's size.
 func (o {{.Name}}) XDRSize() int {
 	return {{.SizeExpr}}
 }//+n
 
+// MarshalXDR returns the XDR encoding.
 func (o {{.Name}}) MarshalXDR() ([]byte, error) {
 	buf:= make([]byte, o.XDRSize())
 	m := &xdr.Marshaller{Data: buf}
 	return buf, o.MarshalXDRInto(m)
 }//+n
 
+// MustMarshalXDR returns the XDR encoding. MustMarshalXDR
+// panics in case of error.
 func (o {{.Name}}) MustMarshalXDR() []byte {
 	bs, err := o.MarshalXDR()
 	if err != nil {
@@ -111,6 +115,7 @@ func (o {{.Name}}) MustMarshalXDR() []byte {
 	return bs
 }//+n
 
+// MarshalXDRInto marshals the struct using the provided Marshaller.
 func (o {{.Name}}) MarshalXDRInto(m *xdr.Marshaller) error {
 	{{range $fi := .Fields}}
 		{{if $fi.IsSlice}}
@@ -160,11 +165,14 @@ func (o {{.Name}}) MarshalXDRInto(m *xdr.Marshaller) error {
 	}
 {{end}}
 
+// Unmarshal parses the XDR-encoded data and stores the result in the
+// struct.
 func (o *{{.Name}}) UnmarshalXDR(bs []byte) error {
 	u := &xdr.Unmarshaller{Data: bs}
 	return o.UnmarshalXDRFrom(u)
 }
 
+// UnmarshalXDRFrom unmarshals the struct using the provided Unmarshaller.
 func (o *{{.Name}}) UnmarshalXDRFrom(u *xdr.Unmarshaller) error {
 	{{range $fi := .Fields}}
 		{{if $fi.IsSlice}}
@@ -236,26 +244,34 @@ var (
 )
 
 var emptyTypeTpl = template.Must(template.New("encoder").Parse(`
+// XDRSize returns the XDR encoded form's size.
 func (o {{.Name}}) XDRSize() int {
 	return 0
 }
 
+// MarshalXDR returns the XDR encoding.
 func (o {{.Name}}) MarshalXDR() ([]byte, error) {
 	return nil, nil
 }//+n
 
+// MustMarshalXDR returns the XDR encoding. MustMarshalXDR
+// panics in case of error.
 func (o {{.Name}}) MustMarshalXDR() []byte {
 	return nil
 }//+n
 
+// MarshalXDRInto marshals the struct using the provided Marshaller.
 func (o {{.Name}}) MarshalXDRInto(m *xdr.Marshaller) error {
 	return nil
 }//+n
 
+// Unmarshal parses the XDR-encoded data and stores the result in the
+// struct.
 func (o *{{.Name}}) UnmarshalXDR(bs []byte) error {
 	return nil
 }//+n
 
+// UnmarshalXDRFrom unmarshals the struct using the provided Unmarshaller.
 func (o *{{.Name}}) UnmarshalXDRFrom(u *xdr.Unmarshaller) error {
 	return nil
 }//+n
