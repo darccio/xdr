@@ -6,7 +6,7 @@ package xdr
 
 import "io"
 
-// The Marshaller is a thin wrapper around a byte buffer. The buffer must be
+// Marshaller is a thin wrapper around a byte buffer. The buffer must be
 // of sufficient size to hold the complete marshalled object, or an
 // io.ErrShortBuffer error will result. The Marshal... methods don't
 // individually return an error - the intention is that multiple fields are
@@ -50,7 +50,7 @@ func (m *Marshaller) MarshalString(s string) {
 	m.offset += copy(m.Data[m.offset:], padBytes[:Padding(len(s))])
 }
 
-// MarshalString appends the bytes to the buffer, with a size prefix and
+// MarshalBytes appends the bytes to the buffer, with a size prefix and
 // correct padding.
 func (m *Marshaller) MarshalBytes(bs []byte) {
 	if m.Error != nil {
@@ -66,7 +66,7 @@ func (m *Marshaller) MarshalBytes(bs []byte) {
 	m.offset += copy(m.Data[m.offset:], padBytes[:Padding(len(bs))])
 }
 
-// MarshalString appends the bool to the buffer, as an uint32.
+// MarshalBool appends the bool to the buffer, as an uint32.
 func (m *Marshaller) MarshalBool(v bool) {
 	if v {
 		m.MarshalUint8(1)
@@ -75,17 +75,17 @@ func (m *Marshaller) MarshalBool(v bool) {
 	}
 }
 
-// MarshalString appends the uint8 to the buffer, as an uint32.
+// MarshalUint8 appends the uint8 to the buffer, as an uint32.
 func (m *Marshaller) MarshalUint8(v uint8) {
 	m.MarshalUint32(uint32(v))
 }
 
-// MarshalString appends the uint16 to the buffer, as an uint32.
+// MarshalUint16 appends the uint16 to the buffer, as an uint32.
 func (m *Marshaller) MarshalUint16(v uint16) {
 	m.MarshalUint32(uint32(v))
 }
 
-// MarshalString appends the uint32 to the buffer.
+// MarshalUint32 appends the uint32 to the buffer.
 func (m *Marshaller) MarshalUint32(v uint32) {
 	if m.Error != nil {
 		return
@@ -102,7 +102,7 @@ func (m *Marshaller) MarshalUint32(v uint32) {
 	m.offset += 4
 }
 
-// MarshalString appends the uint64 to the buffer.
+// MarshalUint64 appends the uint64 to the buffer.
 func (m *Marshaller) MarshalUint64(v uint64) {
 	if m.Error != nil {
 		return

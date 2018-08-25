@@ -11,7 +11,7 @@ import (
 
 var padBytes = []byte{0, 0, 0}
 
-// Pad returns the number of bytes that should be added to an item of length l
+// Padding returns the number of bytes that should be added to an item of length l
 // bytes to conform to the XDR padding standard. This function is used by the
 // generated marshalling code.
 func Padding(l int) int {
@@ -28,12 +28,13 @@ func ElementSizeExceeded(field string, size, limit int) error {
 	return fmt.Errorf("%s exceeds size limit; %d > %d", field, size, limit)
 }
 
-type XDRSizer interface {
+// Sizer is a value that can return its XDR serialized size.
+type Sizer interface {
 	XDRSize() int
 }
 
 // SizeOfSlice returns the XDR encoded size of the given []T. Supported types
-// for T are string, []byte and types implementing XDRSizer. SizeOfSlice
+// for T are string, []byte and types implementing Sizer. SizeOfSlice
 // panics if the parameter is not a slice or if T is not one of the supported
 // types. This function is used by the generated marshalling code.
 func SizeOfSlice(ss interface{}) int {
@@ -52,7 +53,7 @@ func SizeOfSlice(ss interface{}) int {
 	default:
 		v := reflect.ValueOf(ss)
 		for i := 0; i < v.Len(); i++ {
-			l += v.Index(i).Interface().(XDRSizer).XDRSize()
+			l += v.Index(i).Interface().(Sizer).XDRSize()
 		}
 	}
 

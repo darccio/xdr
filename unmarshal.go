@@ -6,11 +6,18 @@ package xdr
 
 import "io"
 
+// Unmarshaller is a thin wrapper around a byte buffer. The Unmarshal... methods
+// don't individually return an error - the intention is that multiple fields are
+// unmarshalled in rapid succession, followed by a check of the Error field on
+// the Unmarshaller.
 type Unmarshaller struct {
 	Error error
 	Data  []byte
 }
 
+// UnmarshalRaw returns a byte slice of length l from the buffer,
+// without a size prefix or padding. This is suitable for retrieving
+// data already in XDR format.
 func (u *Unmarshaller) UnmarshalRaw(l int) []byte {
 	if u.Error != nil {
 		return nil
@@ -26,10 +33,12 @@ func (u *Unmarshaller) UnmarshalRaw(l int) []byte {
 	return v
 }
 
+// UnmarshalString returns a string from the buffer.
 func (u *Unmarshaller) UnmarshalString() string {
 	return u.UnmarshalStringMax(0)
 }
 
+// UnmarshalStringMax returns a string up to a max length from the buffer.
 func (u *Unmarshaller) UnmarshalStringMax(max int) string {
 	buf := u.UnmarshalBytesMax(max)
 	if len(buf) == 0 || u.Error != nil {
@@ -39,10 +48,12 @@ func (u *Unmarshaller) UnmarshalStringMax(max int) string {
 	return string(buf)
 }
 
+// UnmarshalBytes returns a byte slice from the buffer.
 func (u *Unmarshaller) UnmarshalBytes() []byte {
 	return u.UnmarshalBytesMax(0)
 }
 
+// UnmarshalBytesMax returns a byte slice up to a max length from the buffer.
 func (u *Unmarshaller) UnmarshalBytesMax(max int) []byte {
 	if u.Error != nil {
 		return nil
@@ -73,10 +84,12 @@ func (u *Unmarshaller) UnmarshalBytesMax(max int) []byte {
 	return v
 }
 
+// UnmarshalBool returns a bool from the buffer.
 func (u *Unmarshaller) UnmarshalBool() bool {
 	return u.UnmarshalUint8() != 0
 }
 
+// UnmarshalUint8 returns a uint8 from the buffer.
 func (u *Unmarshaller) UnmarshalUint8() uint8 {
 	if u.Error != nil {
 		return 0
@@ -92,6 +105,7 @@ func (u *Unmarshaller) UnmarshalUint8() uint8 {
 	return v
 }
 
+// UnmarshalUint16 returns a uint16 from the buffer.
 func (u *Unmarshaller) UnmarshalUint16() uint16 {
 	if u.Error != nil {
 		return 0
@@ -107,6 +121,7 @@ func (u *Unmarshaller) UnmarshalUint16() uint16 {
 	return v
 }
 
+// UnmarshalUint32 returns a uint32 from the buffer.
 func (u *Unmarshaller) UnmarshalUint32() uint32 {
 	if u.Error != nil {
 		return 0
@@ -122,6 +137,7 @@ func (u *Unmarshaller) UnmarshalUint32() uint32 {
 	return v
 }
 
+// UnmarshalUint64 returns a uint64 from the buffer.
 func (u *Unmarshaller) UnmarshalUint64() uint64 {
 	if u.Error != nil {
 		return 0
