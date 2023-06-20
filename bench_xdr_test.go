@@ -5,7 +5,7 @@
 package xdr_test
 
 import (
-	"github.com/imdario/xdr"
+	"dario.cat/xdr"
 )
 
 /*
@@ -63,6 +63,7 @@ struct XDRBenchStruct {
 
 */
 
+// XDRSize returns the XDR encoded form's size.
 func (o XDRBenchStruct) XDRSize() int {
 	return 8 + 4 + 4 + 4 +
 		4 + len(o.Bs0) + xdr.Padding(len(o.Bs0)) +
@@ -72,12 +73,15 @@ func (o XDRBenchStruct) XDRSize() int {
 		4 + len(o.S1) + xdr.Padding(len(o.S1))
 }
 
+// MarshalXDR returns the XDR encoding.
 func (o XDRBenchStruct) MarshalXDR() ([]byte, error) {
 	buf := make([]byte, o.XDRSize())
 	m := &xdr.Marshaller{Data: buf}
 	return buf, o.MarshalXDRInto(m)
 }
 
+// MustMarshalXDR returns the XDR encoding. MustMarshalXDR
+// panics in case of error.
 func (o XDRBenchStruct) MustMarshalXDR() []byte {
 	bs, err := o.MarshalXDR()
 	if err != nil {
@@ -86,6 +90,7 @@ func (o XDRBenchStruct) MustMarshalXDR() []byte {
 	return bs
 }
 
+// MarshalXDRInto marshals the struct using the provided Marshaller.
 func (o XDRBenchStruct) MarshalXDRInto(m *xdr.Marshaller) error {
 	m.MarshalUint64(o.I1)
 	m.MarshalUint32(o.I2)
@@ -108,10 +113,14 @@ func (o XDRBenchStruct) MarshalXDRInto(m *xdr.Marshaller) error {
 	return m.Error
 }
 
+// UnmarshalXDR parses the XDR-encoded data and stores the result in the
+// struct.
 func (o *XDRBenchStruct) UnmarshalXDR(bs []byte) error {
 	u := &xdr.Unmarshaller{Data: bs}
 	return o.UnmarshalXDRFrom(u)
 }
+
+// UnmarshalXDRFrom unmarshals the struct using the provided Unmarshaller.
 func (o *XDRBenchStruct) UnmarshalXDRFrom(u *xdr.Unmarshaller) error {
 	o.I1 = u.UnmarshalUint64()
 	o.I2 = u.UnmarshalUint32()

@@ -13,7 +13,7 @@ import (
 	"testing"
 	"testing/quick"
 
-	"github.com/imdario/xdr"
+	"dario.cat/xdr"
 )
 
 // Contains all supported types

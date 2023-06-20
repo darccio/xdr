@@ -88,7 +88,7 @@ var headerData = `// ***********************************************************
 package {{.Package}}
 
 import (
-	"github.com/imdario/xdr"
+	"dario.cat/xdr"
 )
 `
 
